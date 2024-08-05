@@ -1,9 +1,5 @@
-import { Text, View } from 'react-native';
+import LoginScreen from '../presentation/screens/auth/LoginScreen';
 const Login = () => {
-  return (
-    <View>
-      <Text>Login</Text>
-    </View>
-  );
+  return <LoginScreen />;
 };
 export default Login;
