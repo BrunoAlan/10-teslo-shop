@@ -3,7 +3,7 @@ import { Alert, ScrollView, useWindowDimensions } from 'react-native';
 import CustomIcon from '../../components/ui/CustomIcon';
 import { Stack, useRouter } from 'expo-router';
 import { useState } from 'react';
-import { useAuthStore } from '../../store/auth/useStore';
+import { useAuthStore } from '../../store/auth/useAuthStore';
 
 const LoginScreen = () => {
   const { height } = useWindowDimensions();
