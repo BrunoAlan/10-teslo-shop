@@ -1,9 +1,11 @@
 import { Button, Input, Layout, Text } from '@ui-kitten/components';
 import { ScrollView, useWindowDimensions } from 'react-native';
 import CustomIcon from '../../components/ui/CustomIcon';
+import { useRouter } from 'expo-router';
 
 const LoginScreen = () => {
   const { height } = useWindowDimensions();
+  const router = useRouter();
   return (
     <Layout style={{ flex: 1 }}>
       <ScrollView style={{ marginHorizontal: 40 }}>
@@ -47,7 +49,11 @@ const LoginScreen = () => {
               }}
             >
               <Text>Don't have an account?</Text>
-              <Text status='primary' category='s1' onPress={() => {}}>
+              <Text
+                status='primary'
+                category='s1'
+                onPress={() => router.navigate('/Register')}
+              >
                 {' '}
                 Sign up{' '}
               </Text>
