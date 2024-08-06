@@ -1,4 +1,5 @@
 import { authLogin } from '@/src/actions/auth/auth';
+import { StorageAdapter } from '@/src/config/adapters/storage-adapter';
 import type { User } from '@/src/domain/entities/user';
 import type { AuthStatus } from '@/src/infrastructure/interfaces/auth.status';
 import { create } from 'zustand';
@@ -28,7 +29,8 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
       user: response.user,
     });
 
-    //TODO save token to storage
+    await StorageAdapter.setItem('token', response.token);
+
     return true;
   },
 }));
