@@ -16,7 +16,6 @@ function CustomIcon({ name, color, white = false }: Props) {
   } else {
     color = theme[color] ?? theme['text-basic-color'];
   }
-  console.log(theme);
 
   return <Icon name={name} fill={color} style={styles.icon} />;
 }
