@@ -1,13 +1,14 @@
 import { Button, Input, Layout, Text } from '@ui-kitten/components';
 import { ScrollView, useWindowDimensions } from 'react-native';
 import CustomIcon from '../../components/ui/CustomIcon';
-import { useRouter } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 
 const LoginScreen = () => {
   const { height } = useWindowDimensions();
   const router = useRouter();
   return (
     <Layout style={{ flex: 1 }}>
+      <Stack.Screen options={{ animation: 'fade' }} />
       <ScrollView style={{ marginHorizontal: 40 }}>
         <Layout style={{ paddingTop: height * 0.35 }}>
           <Text category='h1'>Login</Text>
