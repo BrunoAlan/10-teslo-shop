@@ -1,11 +1,31 @@
 import { Button, Input, Layout, Text } from '@ui-kitten/components';
-import { ScrollView, useWindowDimensions } from 'react-native';
+import { Alert, ScrollView, useWindowDimensions } from 'react-native';
 import CustomIcon from '../../components/ui/CustomIcon';
 import { Stack, useRouter } from 'expo-router';
+import { useState } from 'react';
+import { useAuthStore } from '../../store/auth/useStore';
 
 const LoginScreen = () => {
   const { height } = useWindowDimensions();
   const router = useRouter();
+  const { login } = useAuthStore();
+  const [isPosting, setIsPosting] = useState(false);
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  });
+
+  const onLogin = async () => {
+    if (!form.email || !form.password) {
+      return;
+    }
+    setIsPosting(true);
+    const wasSuccessful = await login(form.email, form.password);
+    setIsPosting(false);
+    if (wasSuccessful) return;
+    Alert.alert('Invalid credentials');
+  };
+
   return (
     <Layout style={{ flex: 1 }}>
       <Stack.Screen options={{ animation: 'fade' }} />
@@ -20,6 +40,8 @@ const LoginScreen = () => {
               style={{ marginBottom: 10 }}
               autoCapitalize='none'
               keyboardType='email-address'
+              value={form.email}
+              onChangeText={(email) => setForm({ ...form, email })}
               accessoryLeft={<CustomIcon name='email-outline' />}
             />
             <Input
@@ -27,15 +49,18 @@ const LoginScreen = () => {
               style={{ marginBottom: 10 }}
               autoCapitalize='none'
               secureTextEntry
+              value={form.password}
+              onChangeText={(password) => setForm({ ...form, password })}
               accessoryLeft={<CustomIcon name='lock-outline' />}
             />
             <Layout style={{ height: 20 }} />
             <Layout>
               <Button
+                disabled={isPosting}
                 accessoryRight={
                   <CustomIcon white name='arrow-forward-outline' />
                 }
-                onPress={() => {}}
+                onPress={onLogin}
               >
                 Log in
               </Button>
