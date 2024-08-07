@@ -1,19 +1,24 @@
 import { Button, Layout, Text } from '@ui-kitten/components';
-import CustomIcon from '../../components/ui/CustomIcon';
 import { useAuthStore } from '../../store/auth/useAuthStore';
+import { useQuery } from '@tanstack/react-query';
+import { getProductsByPage } from '@/src/actions/products/get-products-by-page';
+import MainLayout from '../../layouts/MainLayout';
 
 const HomeScreen = () => {
   const { logout } = useAuthStore();
+  const { isLoading, data: products = [] } = useQuery({
+    queryKey: ['products', 'infinite'],
+    staleTime: 1000 * 60 * 60, // 1 hour
+    queryFn: () => getProductsByPage(0),
+  });
+
   return (
-    <Layout style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text category='h1'>Home</Text>
-      <Button
-        accessoryLeft={<CustomIcon name='log-out-outline' white />}
-        onPress={logout}
-      >
-        Logout
-      </Button>
-    </Layout>
+    <MainLayout
+      title='TesloShop - Products'
+      subTitle='Welcome to the TesloShop'
+    >
+      <Text>asdas</Text>
+    </MainLayout>
   );
 };
 export default HomeScreen;
