@@ -1,5 +1,5 @@
 import { Product } from '@/src/domain/entities/product';
-import { Card, Layout, Text } from '@ui-kitten/components';
+import { Card, Text } from '@ui-kitten/components';
 import { Image } from 'react-native';
 import { FadeInImage } from '../ui/FadeInImage';
 
