@@ -1,11 +1,11 @@
-import { Button, Layout, Text } from '@ui-kitten/components';
-import { useAuthStore } from '../../store/auth/useAuthStore';
+import { Layout } from '@ui-kitten/components';
 import { useQuery } from '@tanstack/react-query';
 import { getProductsByPage } from '@/src/actions/products/get-products-by-page';
 import MainLayout from '../../layouts/MainLayout';
+import FullScreenLoader from '../../components/ui/FullScreenLoader';
+import ProductsList from '../../components/products/ProductsList';
 
 const HomeScreen = () => {
-  const { logout } = useAuthStore();
   const { isLoading, data: products = [] } = useQuery({
     queryKey: ['products', 'infinite'],
     staleTime: 1000 * 60 * 60, // 1 hour
@@ -17,7 +17,13 @@ const HomeScreen = () => {
       title='TesloShop - Products'
       subTitle='Welcome to the TesloShop'
     >
-      <Text>asdas</Text>
+      {isLoading ? (
+        <FullScreenLoader />
+      ) : (
+        <Layout>
+          <ProductsList products={products} />
+        </Layout>
+      )}
     </MainLayout>
   );
 };
