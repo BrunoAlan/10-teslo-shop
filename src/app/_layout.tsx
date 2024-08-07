@@ -5,6 +5,7 @@ import { useColorScheme } from 'react-native';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as SystemUI from 'expo-system-ui';
 import { AuthProvider } from '../presentation/providers/AuthProvider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -14,9 +15,10 @@ export default function RootLayout() {
       ? theme['color-basic-800']
       : theme['color-basic-800'];
   SystemUI.setBackgroundColorAsync(background);
+  const queryClient = new QueryClient();
 
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <IconRegistry icons={EvaIconsPack} />
         <ApplicationProvider {...eva} theme={theme}>
@@ -29,6 +31,6 @@ export default function RootLayout() {
           </Stack>
         </ApplicationProvider>
       </AuthProvider>
-    </>
+    </QueryClientProvider>
   );
 }
