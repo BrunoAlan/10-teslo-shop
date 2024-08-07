@@ -1,15 +1,26 @@
 import { Layout } from '@ui-kitten/components';
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { getProductsByPage } from '@/src/actions/products/get-products-by-page';
 import MainLayout from '../../layouts/MainLayout';
 import FullScreenLoader from '../../components/ui/FullScreenLoader';
 import ProductsList from '../../components/products/ProductsList';
 
 const HomeScreen = () => {
-  const { isLoading, data: products = [] } = useQuery({
+  // const { isLoading, data: products = [] } = useQuery({
+  //   queryKey: ['products', 'infinite'],
+  //   staleTime: 1000 * 60 * 60, // 1 hour
+  //   queryFn: () => getProductsByPage(0),
+  // });
+
+  const { isLoading, data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['products', 'infinite'],
     staleTime: 1000 * 60 * 60, // 1 hour
-    queryFn: () => getProductsByPage(0),
+    initialPageParam: 0,
+    queryFn: async (params) => {
+      const products = await getProductsByPage(params.pageParam);
+      return products;
+    },
+    getNextPageParam: (lastPage, allPages) => allPages.length,
   });
 
   return (
@@ -21,7 +32,10 @@ const HomeScreen = () => {
         <FullScreenLoader />
       ) : (
         <Layout>
-          <ProductsList products={products} />
+          <ProductsList
+            products={data?.pages.flat() ?? []}
+            fetchNextPage={fetchNextPage}
+          />
         </Layout>
       )}
     </MainLayout>
