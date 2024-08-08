@@ -14,6 +14,7 @@ import {
 import { FadeInImage } from '../../components/ui/FadeInImage';
 import { Size, Gender } from '@/src/domain/entities/product';
 import CustomIcon from '../../components/ui/CustomIcon';
+import { Formik } from 'formik';
 
 const sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl];
 const genders: Gender[] = [Gender.Kid, Gender.Men, Gender.Unisex, Gender.Women];
@@ -41,118 +42,140 @@ const ProductScreen = () => {
   }
 
   return (
-    <MainLayout title={product?.title} subTitle={`$ ${product?.price}`}>
-      <ScrollView style={{ flex: 1 }}>
-        {/* Product images */}
-        <Layout>
-          <FlatList
-            data={product?.images}
-            horizontal
-            keyExtractor={(item) => item}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
-              <FadeInImage
-                uri={item}
-                style={{ width: 300, height: 300, marginHorizontal: 7 }}
+    <Formik initialValues={product} onSubmit={(values) => console.log(values)}>
+      {({ handleChange, handleSubmit, values, errors, setFieldValue }) => (
+        <MainLayout title={values.title} subTitle={`$ ${values.price}`}>
+          <ScrollView style={{ flex: 1 }}>
+            {/* Product images */}
+            <Layout>
+              <FlatList
+                data={values.images}
+                horizontal
+                keyExtractor={(item) => item}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item }) => (
+                  <FadeInImage
+                    uri={item}
+                    style={{ width: 300, height: 300, marginHorizontal: 7 }}
+                  />
+                )}
               />
-            )}
-          />
-        </Layout>
-        {/* Form */}
-        <Layout style={{ marginHorizontal: 10 }}>
-          <Input
-            label={'Title'}
-            value={product.title}
-            style={{ marginVertical: 5 }}
-          />
-          <Input
-            label={'Slug'}
-            value={product.slug}
-            style={{ marginVertical: 5 }}
-          />
-          <Input
-            label={'Description'}
-            value={product.description}
-            style={{ marginVertical: 5 }}
-            multiline
-            numberOfLines={5}
-          />
-        </Layout>
+            </Layout>
+            {/* Form */}
+            <Layout style={{ marginHorizontal: 10 }}>
+              <Input
+                label={'Title'}
+                style={{ marginVertical: 5 }}
+                value={values.title}
+                onChangeText={handleChange('title')}
+              />
+              <Input
+                label={'Slug'}
+                style={{ marginVertical: 5 }}
+                value={values.slug}
+                onChangeText={handleChange('slug')}
+              />
+              <Input
+                label={'Description'}
+                style={{ marginVertical: 5 }}
+                multiline
+                numberOfLines={5}
+                value={values.description}
+                onChangeText={handleChange('description')}
+              />
+            </Layout>
 
-        <Layout
-          style={{
-            marginHorizontal: 15,
-            flexDirection: 'row',
-            gap: 10,
-            marginVertical: 5,
-          }}
-        >
-          {/* Price and stock */}
-          <Input
-            label={'Price'}
-            value={product.price.toString()}
-            style={{ flex: 1 }}
-          />
-          <Input
-            label={'Stock'}
-            value={product.stock.toString()}
-            style={{ flex: 1 }}
-          />
-        </Layout>
-
-        {/* Selectors */}
-        <ButtonGroup
-          size='small'
-          style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }}
-          appearance='outline'
-        >
-          {sizes.map((size) => (
-            <Button
+            <Layout
               style={{
-                flex: 1,
-                backgroundColor: true ? theme['color-primary-200'] : undefined,
+                marginHorizontal: 15,
+                flexDirection: 'row',
+                gap: 10,
+                marginVertical: 5,
               }}
-              key={size}
-              status='basic'
             >
-              {size}
-            </Button>
-          ))}
-        </ButtonGroup>
+              {/* Price and stock */}
+              <Input
+                label={'Price'}
+                style={{ flex: 1 }}
+                value={values.price.toString()}
+                onChangeText={handleChange('price')}
+              />
+              <Input
+                label={'Stock'}
+                style={{ flex: 1 }}
+                value={values.stock.toString()}
+                onChangeText={handleChange('stock')}
+              />
+            </Layout>
 
-        <ButtonGroup
-          size='small'
-          style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }}
-          appearance='outline'
-        >
-          {genders.map((gender) => (
+            {/* Selectors */}
+            <ButtonGroup
+              size='small'
+              style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }}
+              appearance='outline'
+            >
+              {sizes.map((size) => (
+                <Button
+                  onPress={() =>
+                    setFieldValue(
+                      'sizes',
+                      values.sizes.includes(size)
+                        ? values.sizes.filter((s) => s !== size)
+                        : [...values.sizes, size]
+                    )
+                  }
+                  style={{
+                    flex: 1,
+                    backgroundColor: values.sizes.includes(size)
+                      ? theme['color-primary-200']
+                      : undefined,
+                  }}
+                  key={size}
+                  status='basic'
+                >
+                  {size}
+                </Button>
+              ))}
+            </ButtonGroup>
+
+            <ButtonGroup
+              size='small'
+              style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }}
+              appearance='outline'
+            >
+              {genders.map((gender) => (
+                <Button
+                  onPress={() => setFieldValue('gender', gender)}
+                  style={{
+                    flex: 1,
+                    backgroundColor: values.gender.startsWith(gender)
+                      ? theme['color-primary-200']
+                      : undefined,
+                  }}
+                  key={gender}
+                  status='basic'
+                >
+                  {gender}
+                </Button>
+              ))}
+            </ButtonGroup>
+
+            {/* Save  */}
             <Button
-              style={{
-                flex: 1,
-                backgroundColor: true ? theme['color-primary-200'] : undefined,
-              }}
-              key={gender}
-              status='basic'
+              style={{ margin: 15 }}
+              accessoryLeft={<CustomIcon name='save-outline' white />}
+              onPress={() => console.log('Save')}
             >
-              {gender}
+              Save
             </Button>
-          ))}
-        </ButtonGroup>
 
-        {/* Save  */}
-        <Button
-          style={{ margin: 15 }}
-          accessoryLeft={<CustomIcon name='save-outline' white />}
-          onPress={() => console.log('Save')}
-        >
-          Save
-        </Button>
+            <Text>{JSON.stringify(values, null, 2)}</Text>
 
-        <Text>{JSON.stringify(product, null, 2)}</Text>
-
-        <Layout style={{ height: 200 }} />
-      </ScrollView>
-    </MainLayout>
+            <Layout style={{ height: 200 }} />
+          </ScrollView>
+        </MainLayout>
+      )}
+    </Formik>
   );
 };
 export default ProductScreen;
