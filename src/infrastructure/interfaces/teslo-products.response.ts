@@ -21,6 +21,13 @@ export enum Size {
   Xxl = 'XXL',
 }
 
+export enum Gender {
+  Kid = 'kid',
+  Men = 'men',
+  Unisex = 'unisex',
+  Women = 'women',
+}
+
 export interface TesloUser {
   id: string;
   email: string;
