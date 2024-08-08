@@ -4,10 +4,23 @@ import { useLocalSearchParams } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
 import { getProductById } from '@/src/actions/products/get-products-by-id';
 import { useRef } from 'react';
-import { Input, Layout } from '@ui-kitten/components';
+import {
+  Button,
+  ButtonGroup,
+  Input,
+  Layout,
+  useTheme,
+} from '@ui-kitten/components';
 import { FadeInImage } from '../../components/ui/FadeInImage';
+import { Size, Gender } from '@/src/domain/entities/product';
+import CustomIcon from '../../components/ui/CustomIcon';
+
+const sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl];
+const genders: Gender[] = [Gender.Kid, Gender.Men, Gender.Unisex, Gender.Women];
+
 const ProductScreen = () => {
   const { Product: productId } = useLocalSearchParams();
+  const theme = useTheme();
   const productIdRef = useRef(productId);
 
   const { data: product, isLoading } = useQuery({
@@ -74,6 +87,7 @@ const ProductScreen = () => {
             marginVertical: 5,
           }}
         >
+          {/* Price and stock */}
           <Input
             label={'Price'}
             value={product.price.toString()}
@@ -85,6 +99,56 @@ const ProductScreen = () => {
             style={{ flex: 1 }}
           />
         </Layout>
+
+        {/* Selectors */}
+        <ButtonGroup
+          size='small'
+          style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }}
+          appearance='outline'
+        >
+          {sizes.map((size) => (
+            <Button
+              style={{
+                flex: 1,
+                backgroundColor: true ? theme['color-primary-200'] : undefined,
+              }}
+              key={size}
+              status='basic'
+            >
+              {size}
+            </Button>
+          ))}
+        </ButtonGroup>
+
+        <ButtonGroup
+          size='small'
+          style={{ margin: 2, marginTop: 20, marginHorizontal: 15 }}
+          appearance='outline'
+        >
+          {genders.map((gender) => (
+            <Button
+              style={{
+                flex: 1,
+                backgroundColor: true ? theme['color-primary-200'] : undefined,
+              }}
+              key={gender}
+              status='basic'
+            >
+              {gender}
+            </Button>
+          ))}
+        </ButtonGroup>
+
+        {/* Save  */}
+        <Button
+          style={{ margin: 15 }}
+          accessoryLeft={<CustomIcon name='save-outline' white />}
+          onPress={() => console.log('Save')}
+        >
+          Save
+        </Button>
+
+        <Text>{JSON.stringify(product, null, 2)}</Text>
 
         <Layout style={{ height: 200 }} />
       </ScrollView>
