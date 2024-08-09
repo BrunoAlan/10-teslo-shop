@@ -3,8 +3,8 @@ import { Product } from '@/src/domain/entities/product';
 import { isAxiosError } from 'axios';
 
 export const updateCreateProduct = (product: Partial<Product>) => {
-  product.stock = Number(product.stock);
-  product.price = Number(product.price);
+  product.stock = isNaN(Number(product.stock)) ? 0 : Number(product.stock);
+  product.price = isNaN(Number(product.price)) ? 0 : Number(product.price);
 
   if (product.id) {
     return updateProduct(product);
