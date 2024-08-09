@@ -1,5 +1,5 @@
 import { Layout } from '@ui-kitten/components';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { getProductsByPage } from '@/src/actions/products/get-products-by-page';
 import MainLayout from '../../layouts/MainLayout';
 import FullScreenLoader from '../../components/ui/FullScreenLoader';
@@ -11,7 +11,6 @@ const HomeScreen = () => {
   //   staleTime: 1000 * 60 * 60, // 1 hour
   //   queryFn: () => getProductsByPage(0),
   // });
-
   const { isLoading, data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['products', 'infinite'],
     staleTime: 1000 * 60 * 60, // 1 hour
