@@ -1,9 +1,9 @@
-import { useNavigation } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { PropsWithChildren, useEffect } from 'react';
 import { useAuthStore } from '../store/auth/useAuthStore';
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
-  const router = useNavigation();
+  const router = useRouter();
   const { checkStatus, status } = useAuthStore();
 
   useEffect(() => {
@@ -14,15 +14,9 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (status !== 'checking') {
       if (status === 'authenticated') {
-        router.reset({
-          index: 0,
-          routes: [{ name: 'Home' } as never],
-        });
+        router.replace('/Home');
       } else {
-        router.reset({
-          index: 0,
-          routes: [{ name: 'Login' } as never],
-        });
+        router.replace('/Login');
       }
     }
     // eslint-disable-next-line  react-hooks/exhaustive-deps
