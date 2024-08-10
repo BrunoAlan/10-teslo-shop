@@ -1,9 +1,8 @@
+import { useRef } from 'react';
 import { ScrollView, Text } from 'react-native';
 import MainLayout from '../../layouts/MainLayout';
 import { useLocalSearchParams } from 'expo-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getProductById } from '@/src/actions/products/get-products-by-id';
-import { useRef } from 'react';
 import {
   Button,
   ButtonGroup,
@@ -11,14 +10,13 @@ import {
   Layout,
   useTheme,
 } from '@ui-kitten/components';
-import { Size, Gender, Product } from '@/src/domain/entities/product';
+import { Product } from '@/src/domain/entities/product';
 import CustomIcon from '../../components/ui/CustomIcon';
 import { Formik } from 'formik';
-import { updateCreateProduct } from '@/src/actions/products/update-create-product';
 import ProductImages from '../../components/products/ProductImages';
-
-const sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl];
-const genders: Gender[] = [Gender.Kid, Gender.Men, Gender.Unisex, Gender.Women];
+import { getProductById, updateCreateProduct } from '@/src/actions/products';
+import FullScreenLoader from '../../components/ui/FullScreenLoader';
+import { genders, sizes } from '@/src/config/constants/constants';
 
 const ProductScreen = () => {
   const { Product: productId } = useLocalSearchParams();
@@ -46,7 +44,7 @@ const ProductScreen = () => {
   });
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <FullScreenLoader />;
   }
 
   if (!product) {
