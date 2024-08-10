@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, Text } from 'react-native';
+import { FlatList, Image, ScrollView, Text } from 'react-native';
 import MainLayout from '../../layouts/MainLayout';
 import { useLocalSearchParams } from 'expo-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -28,7 +28,7 @@ const ProductScreen = () => {
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', productIdRef.current],
-    queryFn: () => getProductById(productId as string),
+    queryFn: () => getProductById(productIdRef.current as string),
   });
 
   const mutation = useMutation({
@@ -66,19 +66,32 @@ const ProductScreen = () => {
         <MainLayout title={values.title} subTitle={`$ ${values.price}`}>
           <ScrollView style={{ flex: 1 }} automaticallyAdjustKeyboardInsets>
             {/* Product images */}
-            <Layout>
-              <FlatList
-                data={values.images}
-                horizontal
-                keyExtractor={(item) => item}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                  <FadeInImage
-                    uri={item}
-                    style={{ width: 300, height: 300, marginHorizontal: 7 }}
-                  />
-                )}
-              />
+            <Layout
+              style={{
+                marginVertical: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              {values.images.length === 0 ? (
+                <Image
+                  source={require('@/src/assets/no-product-image.png')}
+                  style={{ width: 300, height: 300 }}
+                />
+              ) : (
+                <FlatList
+                  data={values.images}
+                  horizontal
+                  keyExtractor={(item) => item}
+                  showsHorizontalScrollIndicator={false}
+                  renderItem={({ item }) => (
+                    <FadeInImage
+                      uri={item}
+                      style={{ width: 300, height: 300, marginHorizontal: 7 }}
+                    />
+                  )}
+                />
+              )}
             </Layout>
             {/* Form */}
             <Layout style={{ marginHorizontal: 10 }}>
