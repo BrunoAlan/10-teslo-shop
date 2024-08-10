@@ -1,4 +1,4 @@
-import { FlatList, Image, ScrollView, Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 import MainLayout from '../../layouts/MainLayout';
 import { useLocalSearchParams } from 'expo-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -11,11 +11,11 @@ import {
   Layout,
   useTheme,
 } from '@ui-kitten/components';
-import { FadeInImage } from '../../components/ui/FadeInImage';
 import { Size, Gender, Product } from '@/src/domain/entities/product';
 import CustomIcon from '../../components/ui/CustomIcon';
 import { Formik } from 'formik';
 import { updateCreateProduct } from '@/src/actions/products/update-create-product';
+import ProductImages from '../../components/products/ProductImages';
 
 const sizes: Size[] = [Size.Xs, Size.S, Size.M, Size.L, Size.Xl, Size.Xxl];
 const genders: Gender[] = [Gender.Kid, Gender.Men, Gender.Unisex, Gender.Women];
@@ -73,25 +73,7 @@ const ProductScreen = () => {
                 alignItems: 'center',
               }}
             >
-              {values.images.length === 0 ? (
-                <Image
-                  source={require('@/src/assets/no-product-image.png')}
-                  style={{ width: 300, height: 300 }}
-                />
-              ) : (
-                <FlatList
-                  data={values.images}
-                  horizontal
-                  keyExtractor={(item) => item}
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={({ item }) => (
-                    <FadeInImage
-                      uri={item}
-                      style={{ width: 300, height: 300, marginHorizontal: 7 }}
-                    />
-                  )}
-                />
-              )}
+              <ProductImages images={values.images} />
             </Layout>
             {/* Form */}
             <Layout style={{ marginHorizontal: 10 }}>
@@ -203,8 +185,6 @@ const ProductScreen = () => {
             >
               Save
             </Button>
-
-            <Text>{JSON.stringify(values, null, 2)}</Text>
 
             <Layout style={{ height: 200 }} />
           </ScrollView>
