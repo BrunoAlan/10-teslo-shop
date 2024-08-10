@@ -4,6 +4,8 @@ import { getProductsByPage } from '@/src/actions/products/get-products-by-page';
 import MainLayout from '../../layouts/MainLayout';
 import FullScreenLoader from '../../components/ui/FullScreenLoader';
 import ProductsList from '../../components/products/ProductsList';
+import FAB from '../../components/ui/FAB';
+import { useRouter } from 'expo-router';
 
 const HomeScreen = () => {
   // const { isLoading, data: products = [] } = useQuery({
@@ -11,6 +13,7 @@ const HomeScreen = () => {
   //   staleTime: 1000 * 60 * 60, // 1 hour
   //   queryFn: () => getProductsByPage(0),
   // });
+  const router = useRouter();
   const { isLoading, data, fetchNextPage } = useInfiniteQuery({
     queryKey: ['products', 'infinite'],
     staleTime: 1000 * 60 * 60, // 1 hour
@@ -23,21 +26,30 @@ const HomeScreen = () => {
   });
 
   return (
-    <MainLayout
-      title='TesloShop - Products'
-      subTitle='Welcome to the TesloShop'
-    >
-      {isLoading ? (
-        <FullScreenLoader />
-      ) : (
-        <Layout>
-          <ProductsList
-            products={data?.pages.flat() ?? []}
-            fetchNextPage={fetchNextPage}
-          />
-        </Layout>
-      )}
-    </MainLayout>
+    <>
+      <MainLayout
+        title='TesloShop - Products'
+        subTitle='Welcome to the TesloShop'
+      >
+        {isLoading ? (
+          <FullScreenLoader />
+        ) : (
+          <Layout>
+            <ProductsList
+              products={data?.pages.flat() ?? []}
+              fetchNextPage={fetchNextPage}
+            />
+          </Layout>
+        )}
+      </MainLayout>
+      <FAB
+        iconName='plus'
+        style={{ position: 'absolute', bottom: 30, right: 20 }}
+        onPress={() => {
+          router.push('/new');
+        }}
+      />
+    </>
   );
 };
 export default HomeScreen;
