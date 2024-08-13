@@ -17,12 +17,14 @@ import ProductImages from '../../components/products/ProductImages';
 import { getProductById, updateCreateProduct } from '@/src/actions/products';
 import FullScreenLoader from '../../components/ui/FullScreenLoader';
 import { genders, sizes } from '@/src/config/constants/constants';
+import { useCameraPermissions } from 'expo-camera';
 
 const ProductScreen = () => {
   const { Product: productId } = useLocalSearchParams();
   const theme = useTheme();
   const productIdRef = useRef<string>(productId as string);
   const queryClient = useQueryClient();
+  const [permission, requestPermission] = useCameraPermissions();
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['product', productIdRef.current],
@@ -61,7 +63,12 @@ const ProductScreen = () => {
       onSubmit={(values) => mutation.mutate(values)}
     >
       {({ handleChange, handleSubmit, values, errors, setFieldValue }) => (
-        <MainLayout title={values.title} subTitle={`$ ${values.price}`}>
+        <MainLayout
+          title={values.title}
+          subTitle={`$ ${values.price}`}
+          rightAction={() => requestPermission()}
+          rightActionIcon='camera-outline'
+        >
           <ScrollView style={{ flex: 1 }} automaticallyAdjustKeyboardInsets>
             {/* Product images */}
             <Layout
