@@ -17,27 +17,24 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "icon": "./src/assets/no-product-image.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.CAMERA",
-        "android.permission.RECORD_AUDIO"
-      ]
+      "package": "com.alanbruno.teslo"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "icon": "./src/assets/no-product-image.png"
     },
     "plugins": [
       "expo-router",
       [
-        "expo-camera",
+        "expo-image-picker",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera.",
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-          "recordAudioAndroid": true
+          "photosPermission": "The app accesses your photos to let you share them with your friends.",
+          "cameraPermission": "The app accesses your camera to let you take photos.",
+          "microphonePermission": "The app accesses your microphone to let you record videos."
         }
       ]
     ],
