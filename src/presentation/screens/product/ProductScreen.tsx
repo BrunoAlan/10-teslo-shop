@@ -69,7 +69,7 @@ const ProductScreen = () => {
             const photos = await CameraAdapter.takePicture();
             setFieldValue('images', [...values.images, ...photos]);
           }}
-          rightActionIcon='camera-outline'
+          rightActionIcon='image-outline'
         >
           <ScrollView style={{ flex: 1 }} automaticallyAdjustKeyboardInsets>
             {/* Product images */}
